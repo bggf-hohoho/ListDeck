@@ -54,14 +54,17 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
 
   // --- Smart Layout Engine ---
   const getLayoutSettings = (): LayoutSettings => {
-    if (count === 1) return { cols: 1, scale: 1.7, gap: 'gap-0', qrSize: 120, maxWidth: 'max-w-xl' };
-    if (count === 2) return { cols: 2, scale: 1.45, gap: 'gap-32', qrSize: 100, maxWidth: 'max-w-6xl' };
-    if (count === 3) return { cols: 3, scale: 1.25, gap: 'gap-16', qrSize: 90, maxWidth: 'max-w-7xl' };
-    if (count === 4) return { cols: 2, scale: 1.2, gap: 'gap-x-32 gap-y-16', qrSize: 80, maxWidth: 'max-w-5xl' };
-    if (count <= 6) return { cols: 3, scale: 1.1, gap: 'gap-x-20 gap-y-12', qrSize: 70, maxWidth: 'max-w-[1400px]' };
-    // Optimization for 7-8 vendors: Tighter gaps, slightly larger scale to fill 16:9 
-    if (count <= 8) return { cols: 4, scale: 0.95, gap: 'gap-x-8 gap-y-6', qrSize: 65, maxWidth: 'max-w-[1700px]' };
-    return { cols: 5, scale: 0.8, gap: 'gap-x-8 gap-y-6', qrSize: 50, maxWidth: 'max-w-[1800px]' };
+    // Highly optimized layout settings for visibility on 16:9 screens
+    if (count === 1) return { cols: 1, scale: 1.6, gap: 'gap-0', qrSize: 140, maxWidth: 'max-w-xl' };
+    if (count === 2) return { cols: 2, scale: 1.35, gap: 'gap-32', qrSize: 120, maxWidth: 'max-w-6xl' };
+    if (count === 3) return { cols: 3, scale: 1.15, gap: 'gap-16', qrSize: 110, maxWidth: 'max-w-7xl' };
+    if (count === 4) return { cols: 2, scale: 1.1, gap: 'gap-x-32 gap-y-12', qrSize: 100, maxWidth: 'max-w-5xl' };
+    if (count <= 6) return { cols: 3, scale: 1.0, gap: 'gap-x-20 gap-y-10', qrSize: 95, maxWidth: 'max-w-[1400px]' };
+    if (count <= 8) return { cols: 4, scale: 0.9, gap: 'gap-x-12 gap-y-8', qrSize: 90, maxWidth: 'max-w-[1700px]' };
+    if (count <= 10) return { cols: 5, scale: 0.85, gap: 'gap-x-10 gap-y-6', qrSize: 85, maxWidth: 'max-w-[1900px]' };
+    
+    // Fallback for very large numbers
+    return { cols: 6, scale: 0.75, gap: 'gap-x-8 gap-y-6', qrSize: 75, maxWidth: 'max-w-full' };
   };
 
   const layout = getLayoutSettings();

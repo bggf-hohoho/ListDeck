@@ -1,11 +1,11 @@
 import { Vendor, StyleType } from '../types';
-import ReactDOMServer from 'react-dom/server';
+import { renderToString } from 'react-dom/server';
 import { QRCodeSVG } from 'qrcode.react';
 import React from 'react';
 
 // Render QR code to base64 string with high resolution and margin
 const renderQR = (url: string) => {
-  const qrString = ReactDOMServer.renderToString(
+  const qrString = renderToString(
     React.createElement(QRCodeSVG, { 
       value: url, 
       size: 256, // High resolution for print/large screens
@@ -137,10 +137,6 @@ export const generateStaticHTML = (vendors: Vendor[], style: StyleType): string 
       `);
       break;
     
-    // ... Implement basic structure for all other styles to use renderCards and qrHtml ...
-    // To save space in this response while ensuring functionality, I'm mapping specific distinct layouts,
-    // and using a generic fallback for similar card-based layouts.
-    
     case StyleType.LUXURY_MARBLE:
       styleCSS = `body { background: #fff; font-family: serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
       .container { display: flex; flex-wrap: wrap; gap: 3rem; justify-content: center; }
@@ -171,7 +167,6 @@ export const generateStaticHTML = (vendors: Vendor[], style: StyleType): string 
       `);
       break;
       
-    // Include all new styles from previous turns to ensure export works
     case StyleType.ANIME_MANGA:
       styleCSS = `body { background: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
       .bg-lines { position: absolute; inset: 0; background: conic-gradient(from 0deg at 50% 50%, white 0deg, transparent 5deg, white 10deg, transparent 15deg); opacity: 0.1; z-index: -1; }
@@ -212,8 +207,7 @@ export const generateStaticHTML = (vendors: Vendor[], style: StyleType): string 
       break;
 
     default:
-      // Generic fallback for any style not explicitly defined above but present in types
-      // This ensures even if I missed one in this specific map, it renders somewhat correctly
+      // Generic fallback
       styleCSS = `body { background: #f3f4f6; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }
       .container { display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; }
       .card { background: white; padding: 20px; border-radius: 12px; width: 240px; text-align: center; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
