@@ -98,6 +98,7 @@ const App: React.FC = () => {
       onError={(e) => { e.currentTarget.src = FALLBACK_AVATAR_URL; }}
       alt="BGG Feng" 
       className={`object-cover ${className}`} 
+      loading="lazy"
     />
   );
 

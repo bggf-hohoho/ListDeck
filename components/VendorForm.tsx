@@ -248,6 +248,7 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
                             style={{ 
                               transform: `translate(${vendor.offsetX || 0}px, ${vendor.offsetY || 0}px) scale(${(vendor.scale || 50) / 50})`
                             }}
+                            loading="lazy"
                         />
                     </div>
                     {/* Position Controls */}
