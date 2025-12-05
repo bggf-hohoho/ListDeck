@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { Vendor } from '../types';
 import { Plus, Trash2, Instagram, Upload, Image as ImageIcon, Link as LinkIcon, ZoomIn, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, QrCode } from 'lucide-react';
+import { INITIAL_VENDORS, PRESET_VENDORS } from '../constants';
 
 interface VendorFormProps {
   vendors: Vendor[];
@@ -14,16 +15,31 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
   const activeVendorIdRef = useRef<string | null>(null);
 
   const handleAddVendor = () => {
+    // Determine if we should use a preset vendor based on current count
+    // Logic: if current count matches where a preset would be (relative to initial), use the preset.
+    // e.g., if we start with 3, index 0 of presets corresponds to vendors.length - 3 = 0.
+    const presetIndex = vendors.length - INITIAL_VENDORS.length;
+    let newVendorTemplate: Vendor;
+
+    if (presetIndex >= 0 && presetIndex < PRESET_VENDORS.length) {
+      newVendorTemplate = PRESET_VENDORS[presetIndex];
+    } else {
+      newVendorTemplate = {
+        id: '', // Placeholder
+        name: '名稱',
+        role: '內文描述',
+        handle: '',
+        url: 'https://instagram.com',
+        imageUrl: `https://picsum.photos/400/400?random=${Date.now()}`,
+        scale: 50,
+        offsetX: 0,
+        offsetY: 0
+      };
+    }
+
     const newVendor: Vendor = {
+      ...newVendorTemplate,
       id: Date.now().toString(),
-      name: '',
-      role: '婚禮廠商',
-      handle: '',
-      url: 'https://instagram.com',
-      imageUrl: `https://picsum.photos/400/400?random=${Date.now()}`,
-      scale: 50,
-      offsetX: 0,
-      offsetY: 0
     };
     setVendors([...vendors, newVendor]);
   };
@@ -39,8 +55,8 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
         
         // If name is empty or looks like a previous handle, auto-fill it
         const currentName = v.name;
-        // Simple heuristic: if name is empty or same as previous handle, update it
-        const shouldUpdateName = !currentName || currentName === v.handle; 
+        // Simple heuristic: if name is empty or same as previous handle OR is the default "名稱", update it
+        const shouldUpdateName = !currentName || currentName === v.handle || currentName === '名稱'; 
         const newName = shouldUpdateName ? cleanHandle : currentName;
 
         return {
@@ -159,24 +175,24 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                {/* Role Input (Left) - Renamed Label */}
+                {/* Name Input (Left) - Swapped */}
                 <div>
-                  <label className="text-xs text-gray-500 mb-1 block">一級文字</label>
-                  <input 
-                    type="text" 
-                    value={vendor.role}
-                    onChange={(e) => handleUpdate(vendor.id, 'role', e.target.value)}
-                    className="w-full text-sm border rounded p-2 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
-                  />
-                </div>
-                {/* Name Input (Right) - Renamed Label */}
-                <div>
-                  <label className="text-xs text-gray-500 mb-1 block">二級文字</label>
+                  <label className="text-xs text-gray-500 mb-1 block">標題</label>
                   <input 
                     type="text" 
                     value={vendor.name}
                     onChange={(e) => handleUpdate(vendor.id, 'name', e.target.value)}
                     placeholder="自動帶入或自行修改"
+                    className="w-full text-sm border rounded p-2 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
+                  />
+                </div>
+                {/* Role Input (Right) - Swapped */}
+                <div>
+                  <label className="text-xs text-gray-500 mb-1 block">描述</label>
+                  <input 
+                    type="text" 
+                    value={vendor.role}
+                    onChange={(e) => handleUpdate(vendor.id, 'role', e.target.value)}
                     className="w-full text-sm border rounded p-2 bg-gray-50 focus:bg-white focus:ring-2 focus:ring-indigo-500 outline-none"
                   />
                 </div>

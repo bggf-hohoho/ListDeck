@@ -158,31 +158,6 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
     </GridContainer>
   );
 
-  const renderLuxury = () => (
-    <GridContainer layout={layout}>
-        {vendors.map((vendor, i) => (
-          <motion.div
-            key={vendor.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.1 }}
-            className="flex flex-col items-center text-center p-6 border border-[#D4AF37]/30 outline outline-1 outline-[#D4AF37]/30 outline-offset-4 bg-white shadow-xl w-[280px]"
-          >
-            {/* Update: Changed from w-30 h-30 to w-full aspect-[4/5] and removed grayscale */}
-            <div className="relative mb-4 p-1 border border-[#D4AF37] w-full aspect-[4/5] max-h-[180px]">
-              <div className="w-full h-full overflow-hidden">
-                 <img src={vendor.imageUrl} className="w-full h-full object-cover" style={imgStyle(vendor)} />
-              </div>
-            </div>
-            <h3 className="text-[#D4AF37] font-serif text-xs tracking-[0.2em] mb-2">{vendor.role}</h3>
-            <h1 className="font-serif-tc text-xl text-gray-900 mb-1 truncate w-full">{vendor.name}</h1>
-            <div className="w-8 h-px bg-[#D4AF37] my-3"></div>
-            {showQR && <QRWrapper size={layout.qrSize} url={vendor.url} className="shadow-none" />}
-          </motion.div>
-        ))}
-    </GridContainer>
-  );
-
   const renderPolaroid = () => (
     <GridContainer layout={layout}>
         {vendors.map((vendor, i) => (
@@ -458,7 +433,6 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
       case StyleType.ELEGANT_MINIMAL: return renderElegant();
       case StyleType.PLAYFUL_POP: return renderPop();
       case StyleType.RUSTIC_GARDEN: return renderRustic();
-      case StyleType.LUXURY_MARBLE: return renderLuxury();
       case StyleType.VINTAGE_POLAROID: return renderPolaroid();
       case StyleType.BOHO_CHIC: return renderBoho();
       case StyleType.ART_DECO: return renderArtDeco();

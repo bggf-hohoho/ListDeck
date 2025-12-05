@@ -3,6 +3,15 @@ import { StyleType, Vendor } from './types';
 export const INITIAL_VENDORS: Vendor[] = [
   {
     id: '1',
+    role: '傻妹一枚，請支援捧花🥰',
+    name: '妤睿Ray',
+    handle: 'ray_wedding_host',
+    url: 'https://www.instagram.com/ray_wedding_host',
+    imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wd9rwQiR4Y8Q7kNvwHoNMb_&_nc_oc=AdlPhe5-UfM1h_rwC-9KiHVxDDJz6jY8SJLlHrb-mACkFUqz0vDPdhVgpv0CZl-G-Yk&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=9zziu8VIy6CKdHie20ZlKg&oh=00_Afl-qvJTabTrWB7EZAC8g2sxTVfBoSSCqwYYvnPzYHAXPA&oe=69380021',
+    scale: 50,
+  },
+  {
+    id: '2',
     role: '婚禮主持',
     name: '小豐',
     handle: 'Bgg.Feng',
@@ -11,24 +20,17 @@ export const INITIAL_VENDORS: Vendor[] = [
     scale: 50,
   },
   {
-    id: '2',
-    role: '婚禮攝影',
-    name: 'Amimg Photo',
-    handle: 'aming_photo',
-    url: 'https://www.instagram.com/aming_photo',
-    imageUrl: 'https://picsum.photos/400/400?random=1',
-    scale: 50,
-  },
-  {
     id: '3',
-    role: '新娘秘書',
-    name: 'Bella Makeup',
-    handle: 'bella_style',
-    url: 'https://www.instagram.com/bella_style',
-    imageUrl: 'https://picsum.photos/400/400?random=2',
+    role: '台中好吃，佤漾南洋料理',
+    name: 'WAYAN',
+    handle: 'wayan.tw',
+    url: 'https://www.instagram.com/wayan.tw',
+    imageUrl: 'https://static.wixstatic.com/media/8c334e_55010d75c4a142aca8d074b3269eb857~mv2.png/v1/fill/w_562,h_374,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Wayan%20logo%20color%20on%20transparent.png',
     scale: 50,
   }
 ];
+
+export const PRESET_VENDORS: Vendor[] = [];
 
 export const STYLE_CONFIG = {
   // 1. 優雅極簡
@@ -54,14 +56,6 @@ export const STYLE_CONFIG = {
     bg: 'bg-[#F0F4F1]',
     text: 'text-[#2F3E32]',
     accent: 'text-[#4A6741]',
-  },
-  // 4. 奢華大理石
-  [StyleType.LUXURY_MARBLE]: {
-    label: '奢華大理石',
-    subLabel: 'Luxury Marble',
-    bg: 'bg-[#FFFFFF]',
-    text: 'text-[#111111]',
-    accent: 'text-[#D4AF37]',
   },
   // 5. 粉彩萌系 (Moved to #5)
   [StyleType.CUTE_KAWAII]: {

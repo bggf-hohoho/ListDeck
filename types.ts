@@ -2,7 +2,6 @@ export enum StyleType {
   ELEGANT_MINIMAL = 'elegant_minimal',
   PLAYFUL_POP = 'playful_pop',
   RUSTIC_GARDEN = 'rustic_garden',
-  LUXURY_MARBLE = 'luxury_marble',
   VINTAGE_POLAROID = 'vintage_polaroid',
   BOHO_CHIC = 'boho_chic',
   ART_DECO = 'art_deco',

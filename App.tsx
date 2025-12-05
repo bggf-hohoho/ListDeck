@@ -171,12 +171,17 @@ const App: React.FC = () => {
       <div className="w-full md:w-[400px] bg-[#F8F7F4] border-r border-[#E5E0D8] flex flex-col h-full z-10 shadow-xl">
         {/* Header - Height adjusted to accommodate stacking */}
         <div className="h-16 px-6 border-b border-[#E5E0D8] bg-[#F8F7F4] flex flex-col justify-center shrink-0">
-           <div className="flex items-baseline gap-2 w-full overflow-hidden">
+           <a 
+             href="https://www.youtube.com/watch?v=FxfEzHiIgQU"
+             target="_blank" 
+             rel="noopener noreferrer"
+             className="flex items-baseline gap-2 w-full overflow-hidden hover:opacity-70 transition-opacity"
+           >
              <h1 className="text-2xl font-black text-[#4A4036] tracking-tight flex items-center shrink-0">
                <span className="text-[#B38867]">List</span>Deck
              </h1>
              <span className="text-sm text-[#786C5E] font-bold shrink-0">名單生產器</span>
-           </div>
+           </a>
            <a 
              href="https://www.instagram.com/bgg.feng/" 
              target="_blank" 
@@ -292,26 +297,31 @@ const App: React.FC = () => {
               <X size={20} />
             </button>
             
-            <div className="p-6">
-              <h2 className="text-xl font-black text-gray-800 mb-6">更多資訊</h2>
+            <div className="p-6 text-[#333333]">
+              <h2 className="text-xl font-black text-[#333333] mb-6">更多資訊</h2>
               
               {/* Section 1: About Author */}
               <div className="mb-6">
-                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1">
-                  <Info size={14} /> 關於作者 <span className="text-pink-500 ml-1">(歡迎追蹤)</span>
+                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
+                  <Info size={14} /> 關於作者
                 </h3>
+                <p className="text-xs mb-3 font-medium leading-relaxed text-[#333333]">
+                  這工具幫您省下婚禮籌備時間了嗎？<br/>
+                  <span className="font-bold text-[#B76E79]">按個追蹤</span>，就是對小豐<span className="font-bold text-[#B76E79]">最大的鼓勵</span>，支持網站持續優化🥹<br/>
+                  也能搶先獲得更多新點子❤️❤️❤️
+                </p>
                 <a 
                   href="https://www.instagram.com/bgg.feng/" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition border border-gray-100 group"
+                  className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition border border-[#EAEAEA] group"
                 >
                   <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md group-hover:scale-105 transition-transform bg-black">
                      <AuthorImage className="w-full h-full" />
                   </div>
                   <div>
-                     <h4 className="font-bold text-gray-800">小豐aka喜劇受害人</h4>
-                     <p className="text-xs text-blue-600 font-medium mt-0.5">@Bgg.Feng</p>
+                     <h4 className="font-bold text-[#333333]">小豐aka喜劇受害人</h4>
+                     <p className="text-xs text-[#B76E79] font-medium mt-0.5">@Bgg.Feng</p>
                      <p className="text-[10px] text-gray-400 mt-1">Instagram 婚禮主持 / 喜劇演員</p>
                   </div>
                 </a>
@@ -319,38 +329,77 @@ const App: React.FC = () => {
 
               {/* Section 2: Changelog */}
               <div>
-                <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1">
-                  <FileText size={14} /> 更新日誌
+                <h3 className="text-xs font-bold text-[#FF6F61] uppercase tracking-wider mb-3 flex items-center gap-1">
+                  <FileText size={14} /> 更新日誌（請勿點選）
                 </h3>
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 h-40 overflow-y-auto">
+                <div className="bg-gray-50 rounded-xl p-4 border border-[#EAEAEA] h-40 overflow-y-auto">
                    <div className="space-y-3">
-                     <div className="flex gap-3 items-start">
-                        <span className="text-[10px] font-bold bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">NEW</span>
-                        <div className="text-xs text-gray-600">
-                          <p className="font-medium text-gray-800">介面更新</p>
+                     <a 
+                       href="https://www.youtube.com/watch?v=82-dJnNssK0" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-[#FFD700] text-[#333333] px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.4</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-[#FF6F61] transition-colors">迷因彩蛋</p>
+                          增加迷因彩蛋，供使用者耗費無謂的心神。
+                        </div>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/shorts/Uz9k6QGqXj0" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.3</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">介面更新</p>
+                          左側佈局調整，優化使用者按鈕
+                        </div>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/watch?v=Z2Hcsy09DqA" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.2</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">介面更新</p>
                           輸出按鈕移至預覽全螢幕模式，優化操作體驗。
                         </div>
-                     </div>
-                     <div className="flex gap-3 items-start">
-                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">UPDATE</span>
-                        <div className="text-xs text-gray-600">
-                          <p className="font-medium text-gray-800">風格更新</p>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/watch?v=jQSpGXh13H4" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.1</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">風格更新</p>
                           新增 侘寂美學、波西米亞、復古拍立得 等多款設計模板。
                         </div>
-                     </div>
-                     <div className="flex gap-3 items-start">
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/watch?v=vKB2Lg-IM3I" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
                         <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.0</span>
-                        <div className="text-xs text-gray-600">
-                          <p className="font-medium text-gray-800">正式發布</p>
-                          婚禮廠商卡片產生器上線。
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">正式發布</p>
+                          名單產生器上線。
                         </div>
-                     </div>
+                     </a>
                    </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-gray-50 p-4 border-t border-gray-100 text-center">
+            <div className="bg-gray-50 p-4 border-t border-[#EAEAEA] text-center">
               <p className="text-[10px] text-gray-400">© 2024 Wedding Card Generator. All rights reserved.</p>
             </div>
           </div>
