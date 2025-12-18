@@ -1,7 +1,8 @@
 import { StyleType, Vendor } from './types';
 
+// 作者：小豐 的大頭貼 (使用使用者先前提供的網址)
 export const AUTHOR_AVATAR_URL = "https://scontent.fkhh1-2.fna.fbcdn.net/v/t39.30808-6/308606892_493333446137991_866753150527897559_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=hTec36x_PiYQ7kNvwHDT0-w&_nc_oc=AdmEGy5_kLDfR5Xg84gfroOKRvSSY6S9i84jRmqg8iYbkja9LKVBncYXqXNaIaSmLj0&_nc_zt=23&_nc_ht=scontent.fkhh1-2.fna&_nc_gid=La1R28fJFikmtWxbtO9gGw&oh=00_Aflsx9jc9NG3fgzmIsXV3A2G5StBtM0iY7wAxBvEJ-El6A&oe=69499BEF";
-export const FALLBACK_AVATAR_URL = "https://ui-avatars.com/api/?name=BGG&background=000&color=fff&rounded=true&bold=true";
+export const FALLBACK_AVATAR_URL = "https://ui-avatars.com/api/?name=User&background=f3f4f6&color=B76E79&rounded=true&bold=true";
 
 export const INITIAL_VENDORS: Vendor[] = [
   {
@@ -10,7 +11,8 @@ export const INITIAL_VENDORS: Vendor[] = [
     name: '妤睿Ray',
     handle: 'ray_wedding_host',
     url: 'https://www.instagram.com/ray_wedding_host',
-    imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wd9rwQiR4Y8Q7kNvwHoNMb_&_nc_oc=AdlPhe5-UfM1h_rwC-9KiHVxDDJz6jY8SJLlHrb-mACkFUqz0vDPdhVgpv0CZl-G-Yk&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=9zziu8VIy6CKdHie20ZlKg&oh=00_Afl-qvJTabTrWB7EZAC8g2sxTVfBoSSCqwYYvnPzYHAXPA&oe=69380021',
+    // 修正：更換為使用者指定的固定 FB CDN 網址
+    imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=JvHfo8GnN8QQ7kNvwFCrU3e&_nc_oc=AdmXVzVwqndP3t-UXq4qem3fdJyVmG8wREaXAaEXVvOIM_gchrgPyOvnBN2EiP1mvRM&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=aLpU1eBbD8Xj3uGMfsfTkg&oh=00_AfkjXshwaR2w5trVqL9Use0d2KQU0RIGvpUXLe1i_GmjWQ&oe=69499421',
     scale: 50,
     showHandle: true,
   },
@@ -20,7 +22,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     name: '小豐',
     handle: 'Bgg.Feng',
     url: 'https://www.instagram.com/Bgg.Feng',
-    imageUrl: 'https://scontent.fkhh1-2.fna.fbcdn.net/v/t39.30808-6/308606892_493333446137991_866753150527897559_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=hTec36x_PiYQ7kNvwHDT0-w&_nc_oc=AdmEGy5_kLDfR5Xg84gfroOKRvSSY6S9i84jRmqg8iYbkja9LKVBncYXqXNaIaSmLj0&_nc_zt=23&_nc_ht=scontent.fkhh1-2.fna&_nc_gid=La1R28fJFikmtWxbtO9gGw&oh=00_Aflsx9jc9NG3fgzmIsXV3A2G5StBtM0iY7wAxBvEJ-El6A&oe=69499BEF',
+    imageUrl: AUTHOR_AVATAR_URL,
     scale: 50,
     showHandle: true,
   },
@@ -43,7 +45,7 @@ export const PRESET_VENDORS: Vendor[] = [
     name: '泌乳明師',
     handle: 'mizooming',
     url: 'https://www.instagram.com/mizooming',
-    imageUrl: 'https://ugc.production.linktr.ee/b3400246-40c1-49d8-a64a-459ffb6ac96b_IMG_8115.jpeg?io=true&size=avatar-v3_0',
+    imageUrl: 'https://images.unsplash.com/photo-1519415943484-9fa1873496d4?q=80&w=400&auto=format&fit=crop',
     scale: 50,
     showHandle: true,
   },
@@ -53,7 +55,7 @@ export const PRESET_VENDORS: Vendor[] = [
     name: 'LOWCA勞咖早午餐',
     handle: 'lowca__',
     url: 'https://www.instagram.com/lowca__',
-    imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/358598805_690029403137594_1984024008636193652_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=rokvTntBK5YQ7kNvwHJQSoL&_nc_oc=AdmZQ3uYZt1W2kPjnCT8PBJwUlcffDwrAdIrOcqwCljieKT9igPj5C6Ys0sos_jOHjY&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=3r2OQ2CIRu8yw4ooaxPDeg&oh=00_AfnRdCcEnL70e0FTN-kREccX6AuHytoI4MrMjYT3OqA0nQ&oe=6938283D',
+    imageUrl: 'https://images.unsplash.com/photo-1554679665-f5537f187268?q=80&w=400&auto=format&fit=crop',
     scale: 50,
     showHandle: true,
   }
