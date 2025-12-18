@@ -35,14 +35,29 @@
     "framer-motion": "https://esm.sh/framer-motion@10.16.4?external=react,react-dom",
     "qrcode.react": "https://esm.sh/qrcode.react@3.1.0?external=react,react-dom",
     "lucide-react": "https://esm.sh/lucide-react@0.263.1?external=react,react-dom",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/"
+    "react-dom/": "https://aistudiocdn.com/react-dom@^18.2.0/",
+    "react/": "https://aistudiocdn.com/react@^18.2.0/"
   }
 }
 </script>
 </head>
   <body class="bg-gray-50 text-gray-900">
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+  <script type="module">
+  import React from 'react';
+  import { createRoot } from 'react-dom/client';
+
+  // 定義你的組件 (如果不使用 JSX)
+  function App() {
+    return React.createElement(
+      'div',
+      { className: 'p-10 text-center' },
+      React.createElement('h1', { className: 'text-2xl font-bold text-blue-600' }, 'LazyLedger 已啟動！')
+    );
+  }
+
+  const root = createRoot(document.getElementById('root'));
+  root.render(React.createElement(App));
+</script>
   </body>
 </html>
