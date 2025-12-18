@@ -1,13 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { 
-  Monitor, CheckCircle, 
+  CheckCircle, 
   Palette, X, Info, FileText, MoreHorizontal,
-  ChevronLeft, ChevronRight, Wrench
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { PreviewPlayer } from './components/PreviewPlayer';
 import { VendorForm } from './components/VendorForm';
-import { UtilitiesList } from './components/UtilitiesList';
-import { PhotoCropper } from './components/PhotoCropper';
 import { WelcomeModal } from './components/WelcomeModal';
 import { INITIAL_VENDORS, STYLE_CONFIG, AUTHOR_AVATAR_URL, FALLBACK_AVATAR_URL } from './constants';
 import { StyleType, Vendor } from './types';
@@ -22,8 +20,6 @@ const App: React.FC = () => {
   const [showWelcomeModal, setShowWelcomeModal] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [showQR, setShowQR] = useState(true);
-  const [showUtilities, setShowUtilities] = useState(false);
-  const [activeUtility, setActiveUtility] = useState<string | null>(null);
   
   const controlsTimeoutRef = useRef<number | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -42,12 +38,9 @@ const App: React.FC = () => {
     setCurrentStyle(styleKeys[newIndex]);
   };
 
-  // --- CHANGED: Robust Fullscreen Handling ---
-  
-  // 1. Sync React state with Browser state
+  // Robust Fullscreen Handling
   useEffect(() => {
     const handleFullscreenChange = () => {
-      // Check all vendor prefixes
       // @ts-ignore
       const isSystemFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
       
@@ -76,7 +69,6 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // 2. Request Fullscreen
   const enterFullscreen = async () => {
     const elem = document.documentElement;
     try {
@@ -85,16 +77,14 @@ const App: React.FC = () => {
       if (requestMethod) {
         await requestMethod.call(elem);
       } else {
-        // Fallback for unlikely case where API is missing
         setIsFullscreen(true);
       }
     } catch (e) {
       console.error("Failed to enter fullscreen", e);
-      setIsFullscreen(true); // Fallback: simulate fullscreen state if blocked
+      setIsFullscreen(true);
     }
   };
 
-  // 3. Exit Fullscreen (Safe)
   const exitFullscreen = async () => {
     try {
       // @ts-ignore
@@ -118,12 +108,10 @@ const App: React.FC = () => {
           await document.msExitFullscreen();
         }
       } else {
-        // Not in fullscreen natively, force state update
         setIsFullscreen(false);
       }
     } catch (e) {
       console.error("Failed to exit fullscreen", e);
-      // Force state update on error
       setIsFullscreen(false);
     }
   };
@@ -136,14 +124,12 @@ const App: React.FC = () => {
       setShowControls(true);
       if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
       
-      // Hide after 0.75 seconds of inactivity
       controlsTimeoutRef.current = window.setTimeout(() => {
         setShowControls(false);
       }, 750);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
-    // Initial trigger
     handleMouseMove();
 
     return () => {
@@ -157,7 +143,6 @@ const App: React.FC = () => {
     
     setIsExporting(true);
     try {
-      // Small delay to ensure any rendering updates (if any) are done
       await new Promise(resolve => setTimeout(resolve, 50));
       await downloadAsImage(previewRef.current, `ListDeck_${currentStyle}_${Date.now()}`);
     } catch (error) {
@@ -165,15 +150,6 @@ const App: React.FC = () => {
       alert('圖片輸出失敗，請確認圖片網址是否允許跨域存取 (CORS) 或網路連線正常。');
     } finally {
       setIsExporting(false);
-    }
-  };
-
-  const handleToggleUtilities = () => {
-    const nextState = !showUtilities;
-    setShowUtilities(nextState);
-    // Reset active utility when closing sidebar to restore preview
-    if (!nextState) {
-      setActiveUtility(null);
     }
   };
 
@@ -187,11 +163,9 @@ const App: React.FC = () => {
     />
   );
 
-  // If Fullscreen, show minimal UI
   if (isFullscreen) {
     return (
       <div className="w-screen h-screen bg-black group relative overflow-hidden cursor-none hover:cursor-default">
-        {/* Wrapper for capture - Attached ref here for fullscreen export */}
         <div ref={previewRef} className="w-full h-full bg-black">
           <PreviewPlayer 
             vendors={vendors}
@@ -200,10 +174,7 @@ const App: React.FC = () => {
           />
         </div>
 
-        {/* Top Right Controls Group */}
         <div className={`fixed top-6 right-6 flex items-center gap-3 transition-all duration-500 z-50 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}`}>
-           
-           {/* Export Button - Moved from main view */}
            <button 
              onClick={(e) => { e.stopPropagation(); handleDownload(); }}
              disabled={isExporting}
@@ -215,7 +186,6 @@ const App: React.FC = () => {
               <span className="text-sm font-medium">{isExporting ? '處理中...' : '輸出'}</span>
            </button>
 
-           {/* Return Button - Replaced X icon with text */}
            <button 
              onClick={exitFullscreen} 
              className="bg-black/40 hover:bg-black/80 text-white px-4 py-2 rounded-lg backdrop-blur-md border border-white/10 shadow-lg hover:scale-105 transition-all active:scale-95 text-sm font-medium"
@@ -224,7 +194,6 @@ const App: React.FC = () => {
            </button>
         </div>
 
-        {/* Style Navigation Controls (Bottom Center) */}
         <div className={`fixed bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-6 transition-all duration-500 z-50 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}>
            <button 
              onClick={(e) => { e.stopPropagation(); changeStyle('prev'); }}
@@ -255,7 +224,6 @@ const App: React.FC = () => {
       
       {/* Sidebar: Configuration */}
       <div className="w-full md:w-[400px] bg-[#F8F7F4] border-r border-[#E5E0D8] flex flex-col h-full z-10 shadow-xl">
-        {/* Header - Height adjusted to accommodate stacking */}
         <div className="h-16 px-6 border-b border-[#E5E0D8] bg-[#F8F7F4] flex items-center justify-between shrink-0">
            <div className="flex flex-col justify-center min-w-0 mr-2">
              <a 
@@ -278,36 +246,21 @@ const App: React.FC = () => {
                By 小豐｜婚禮主持aka喜劇受害人(@Bgg.Feng)
              </a>
            </div>
-
-           <button 
-             onClick={handleToggleUtilities}
-             className={`shrink-0 p-2 rounded-lg border transition-all duration-200 ${showUtilities ? 'bg-[#B76E79] text-white border-[#B76E79]' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'}`}
-             title={showUtilities ? "返回名單列表" : "開啟實用工具"}
-           >
-             <Wrench size={18} />
-           </button>
         </div>
 
         <div className="flex-1 p-6 overflow-hidden relative">
-          {showUtilities ? (
-             <UtilitiesList onSelectTool={setActiveUtility} activeTool={activeUtility} />
-          ) : (
-            <VendorForm 
-              vendors={vendors} 
-              setVendors={setVendors}
-              showQR={showQR}
-              setShowQR={setShowQR}
-            />
-          )}
+          <VendorForm 
+            vendors={vendors} 
+            setVendors={setVendors}
+            showQR={showQR}
+            setShowQR={setShowQR}
+          />
         </div>
       </div>
 
       {/* Main Area: Preview & Styles */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
-        
-        {/* Top Bar */}
         <div className="h-16 bg-white border-b border-gray-200 flex items-center justify-end px-6 shrink-0">
-          
           <div className="flex items-center gap-2">
             <button 
                 onClick={() => setShowMoreModal(true)}
@@ -323,39 +276,28 @@ const App: React.FC = () => {
               </div>
               <span className="text-sm font-medium">預覽</span>
             </button>
-            
-            {/* Export button removed from here as per requirements */}
           </div>
         </div>
 
-        {/* Content Canvas */}
         <div className="flex-1 bg-gray-200 flex items-center justify-center p-8 overflow-hidden">
-          {activeUtility === 'crop' ? (
-             <div className="w-full h-full max-w-5xl animate-in fade-in zoom-in duration-300">
-               <PhotoCropper />
-             </div>
-          ) : (
-            <div 
-              ref={previewRef}
-              className="w-full max-w-6xl aspect-video bg-white shadow-2xl rounded-sm overflow-hidden border border-gray-300 ring-4 ring-white relative group"
-            >
-               <PreviewPlayer 
-                 vendors={vendors}
-                 currentStyle={currentStyle}
-                 showQR={showQR}
-               />
-            </div>
-          )}
+          <div 
+            ref={previewRef}
+            className="w-full max-w-6xl aspect-video bg-white shadow-2xl rounded-sm overflow-hidden border border-gray-300 ring-4 ring-white relative group"
+          >
+             <PreviewPlayer 
+               vendors={vendors}
+               currentStyle={currentStyle}
+               showQR={showQR}
+             />
+          </div>
         </div>
 
-        {/* Style Selector Footer */}
         <div className="h-48 bg-white border-t border-gray-200 shrink-0 flex flex-col">
           <div className="px-6 py-3 border-b border-gray-100 flex items-center gap-2 text-sm text-gray-500 font-medium">
              <Palette size={16} /> 選擇風格模板
           </div>
           <div className="flex-1 overflow-x-auto flex items-center gap-6 px-8 p-4">
              {Object.entries(STYLE_CONFIG).map(([key, config]) => {
-               // TypeScript hint: config has label, subLabel, etc.
                const conf = config as any; 
                return (
                  <button
@@ -363,7 +305,6 @@ const App: React.FC = () => {
                    onClick={() => setCurrentStyle(key as StyleType)}
                    className={`relative group flex-shrink-0 w-48 h-28 rounded-xl border-2 transition-all duration-300 overflow-hidden text-left p-4 flex flex-col justify-between ${currentStyle === key ? 'border-indigo-500 ring-4 ring-indigo-500/20 scale-105 shadow-xl' : 'border-gray-200 hover:border-indigo-300 hover:shadow-md'}`}
                  >
-                   {/* Mini Preview Mockups */}
                    <div className={`absolute inset-0 ${conf.bg}`}></div>
                    <div className="relative z-10 mb-2">
                      <div className="w-6 h-6 rounded-full mb-1.5 bg-gray-300 shadow-sm"></div>
@@ -388,12 +329,10 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Welcome Modal */}
       {showWelcomeModal && (
         <WelcomeModal onClose={() => setShowWelcomeModal(false)} />
       )}
 
-      {/* "More" Info Modal */}
       {showMoreModal && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
@@ -412,8 +351,6 @@ const App: React.FC = () => {
             
             <div className="p-6 text-[#333333]">
               <h2 className="text-xl font-black text-[#333333] mb-6">更多資訊</h2>
-              
-              {/* Section 1: About Author */}
               <div className="mb-6">
                 <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 flex items-center gap-1">
                   <Info size={14} /> 關於作者
@@ -440,85 +377,15 @@ const App: React.FC = () => {
                 </a>
               </div>
 
-              {/* Section 2: Changelog */}
               <div>
                 <h3 className="text-xs font-bold text-[#FF6F61] uppercase tracking-wider mb-3 flex items-center gap-1">
-                  <FileText size={14} /> 更新日誌（請勿點選）
+                  <FileText size={14} /> 更新日誌
                 </h3>
-                <div className="bg-gray-50 rounded-xl p-4 border border-[#EAEAEA] h-48 overflow-y-auto">
+                <div className="bg-gray-50 rounded-xl p-4 border border-[#EAEAEA] h-48 overflow-y-auto text-xs text-gray-600 leading-relaxed">
                    <div className="space-y-3">
-                     <a 
-                       href="https://www.youtube.com/shorts/h9T8Z3vHZuk" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
-                     >
-                        <span className="text-[10px] font-bold bg-[#FFD700] text-[#333333] px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.5</span>
-                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
-                          <p className="font-medium text-[#333333] group-hover:text-[#FF6F61] transition-colors">介面更新</p>
-                          優化左側欄位，新增『減少名單按鈕』。
-                        </div>
-                     </a>
-                     <a 
-                       href="https://www.youtube.com/watch?v=82-dJnNssK0" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
-                     >
-                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.4</span>
-                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
-                          <p className="font-medium text-[#333333] group-hover:text-[#FF6F61] transition-colors">迷因彩蛋</p>
-                          增加迷因彩蛋，消耗使用者無謂心神。
-                        </div>
-                     </a>
-                     <a 
-                       href="https://www.youtube.com/shorts/Uz9k6QGqXj0" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
-                     >
-                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.3</span>
-                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
-                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">介面更新</p>
-                          左側佈局調整，優化使用者按鈕
-                        </div>
-                     </a>
-                     <a 
-                       href="https://www.youtube.com/watch?v=Z2Hcsy09DqA" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
-                     >
-                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.2</span>
-                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
-                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">介面更新</p>
-                          輸出按鈕移至預覽全螢幕模式，優化操作體驗。
-                        </div>
-                     </a>
-                     <a 
-                       href="https://www.youtube.com/watch?v=jQSpGXh13H4" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
-                     >
-                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.1</span>
-                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
-                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">風格更新</p>
-                          新增 侘寂美學、波西米亞、復古拍立得 等多款設計模板。
-                        </div>
-                     </a>
-                     <a 
-                       href="https://www.youtube.com/watch?v=vKB2Lg-IM3I" 
-                       target="_blank" 
-                       rel="noopener noreferrer"
-                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
-                     >
-                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.0</span>
-                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
-                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">正式發布</p>
-                          名單產生器上線。
-                        </div>
-                     </a>
+                      <p><span className="font-bold text-gray-800">v1.6</span> 移除工具箱圖示與功能，簡化介面。</p>
+                      <p><span className="font-bold text-gray-800">v1.5</span> 優化側欄，新增名單減少按鈕。</p>
+                      <p><span className="font-bold text-gray-800">v1.1</span> 新增侘寂美學等多款風格模板。</p>
                    </div>
                 </div>
               </div>
