@@ -24,7 +24,6 @@ const App: React.FC = () => {
   const controlsTimeoutRef = useRef<number | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  // Helper to cycle styles in fullscreen
   const styleKeys = Object.keys(STYLE_CONFIG) as StyleType[];
 
   const changeStyle = (direction: 'prev' | 'next') => {
@@ -38,12 +37,10 @@ const App: React.FC = () => {
     setCurrentStyle(styleKeys[newIndex]);
   };
 
-  // Robust Fullscreen Handling
   useEffect(() => {
     const handleFullscreenChange = () => {
       // @ts-ignore
       const isSystemFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
-      
       setIsFullscreen(isSystemFullscreen);
       if (isSystemFullscreen) {
         setShowControls(true);
@@ -89,7 +86,6 @@ const App: React.FC = () => {
     try {
       // @ts-ignore
       const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
-
       if (fullscreenElement) {
         // @ts-ignore
         if (document.exitFullscreen) {
@@ -116,14 +112,12 @@ const App: React.FC = () => {
     }
   };
 
-  // Handle auto-hide controls in fullscreen
   useEffect(() => {
     if (!isFullscreen) return;
 
     const handleMouseMove = () => {
       setShowControls(true);
       if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
-      
       controlsTimeoutRef.current = window.setTimeout(() => {
         setShowControls(false);
       }, 750);
@@ -140,7 +134,6 @@ const App: React.FC = () => {
 
   const handleDownload = async () => {
     if (!previewRef.current || isExporting) return;
-    
     setIsExporting(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 50));
@@ -379,13 +372,82 @@ const App: React.FC = () => {
 
               <div>
                 <h3 className="text-xs font-bold text-[#FF6F61] uppercase tracking-wider mb-3 flex items-center gap-1">
-                  <FileText size={14} /> 更新日誌
+                  <FileText size={14} /> 更新日誌（請勿點選）
                 </h3>
-                <div className="bg-gray-50 rounded-xl p-4 border border-[#EAEAEA] h-48 overflow-y-auto text-xs text-gray-600 leading-relaxed">
+                <div className="bg-gray-50 rounded-xl p-4 border border-[#EAEAEA] h-48 overflow-y-auto">
                    <div className="space-y-3">
-                      <p><span className="font-bold text-gray-800">v1.6</span> 移除工具箱圖示與功能，簡化介面。</p>
-                      <p><span className="font-bold text-gray-800">v1.5</span> 優化側欄，新增名單減少按鈕。</p>
-                      <p><span className="font-bold text-gray-800">v1.1</span> 新增侘寂美學等多款風格模板。</p>
+                     <a 
+                       href="https://www.youtube.com/shorts/h9T8Z3vHZuk" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-[#FFD700] text-[#333333] px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.5</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-[#FF6F61] transition-colors">介面更新</p>
+                          優化左側欄位，新增『減少名單按鈕』。
+                        </div>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/watch?v=82-dJnNssK0" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.4</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-[#FF6F61] transition-colors">迷因彩蛋</p>
+                          增加迷因彩蛋，消耗使用者無謂心神。
+                        </div>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/shorts/Uz9k6QGqXj0" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.3</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">介面更新</p>
+                          左側佈局調整，優化使用者按鈕
+                        </div>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/watch?v=Z2Hcsy09DqA" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.2</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">介面更新</p>
+                          輸出按鈕移至預覽全螢幕模式，優化操作體驗。
+                        </div>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/watch?v=jQSpGXh13H4" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.1</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">風格更新</p>
+                          新增 侘寂美學、波西米亞、復古拍立得 等多款設計模板。
+                        </div>
+                     </a>
+                     <a 
+                       href="https://www.youtube.com/watch?v=vKB2Lg-IM3I" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       className="flex gap-3 items-start p-2 rounded-lg hover:bg-gray-100 transition-colors -mx-2 group"
+                     >
+                        <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.0</span>
+                        <div className="text-xs text-gray-600 group-hover:text-[#333333]">
+                          <p className="font-medium text-[#333333] group-hover:text-blue-600 transition-colors">正式發布</p>
+                          名單產生器上線。
+                        </div>
+                     </a>
                    </div>
                 </div>
               </div>
