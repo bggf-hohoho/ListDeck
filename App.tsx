@@ -2,17 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { 
   Monitor, CheckCircle, 
   Palette, X, Info, FileText, MoreHorizontal,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, Wrench
 } from 'lucide-react';
 import { PreviewPlayer } from './components/PreviewPlayer';
 import { VendorForm } from './components/VendorForm';
-import { INITIAL_VENDORS, STYLE_CONFIG } from './constants';
+import { UtilitiesList } from './components/UtilitiesList';
+import { PhotoCropper } from './components/PhotoCropper';
+import { WelcomeModal } from './components/WelcomeModal';
+import { INITIAL_VENDORS, STYLE_CONFIG, AUTHOR_AVATAR_URL, FALLBACK_AVATAR_URL } from './constants';
 import { StyleType, Vendor } from './types';
 import { downloadAsImage } from './utils/exportUtils';
-
-// Extracted constant for consistency across the app
-const AUTHOR_AVATAR_URL = "https://scontent.fkhh1-1.fna.fbcdn.net/v/t1.6435-9/92353989_125022249140816_578947242015064064_n.png?stp=dst-jpg_tt6&_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=lYJE8QVKis8Q7kNvwFcDCWo&_nc_oc=AdkkxB6569c0j3TIEhussHKobD9EK1mDQW85k63Ug7NCDl0vKyJPSyJGKBm3az2cybQ&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=E4kk_110p3hfBwqjmmyBpw&oh=00_Aflc_zddTxrfwq3tQlmtBp_Thp-dL4ACShM_ytb4WDuKhA&oe=69593C46";
-const FALLBACK_AVATAR_URL = "https://ui-avatars.com/api/?name=BGG&background=000&color=fff&rounded=true&bold=true";
 
 const App: React.FC = () => {
   const [vendors, setVendors] = useState<Vendor[]>(INITIAL_VENDORS);
@@ -20,8 +19,11 @@ const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const [showMoreModal, setShowMoreModal] = useState(false);
+  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
   const [isExporting, setIsExporting] = useState(false);
   const [showQR, setShowQR] = useState(true);
+  const [showUtilities, setShowUtilities] = useState(false);
+  const [activeUtility, setActiveUtility] = useState<string | null>(null);
   
   const controlsTimeoutRef = useRef<number | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -40,15 +42,89 @@ const App: React.FC = () => {
     setCurrentStyle(styleKeys[newIndex]);
   };
 
-  const toggleFullscreen = () => {
+  // --- CHANGED: Robust Fullscreen Handling ---
+  
+  // 1. Sync React state with Browser state
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      // Check all vendor prefixes
+      // @ts-ignore
+      const isSystemFullscreen = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement);
+      
+      setIsFullscreen(isSystemFullscreen);
+      if (isSystemFullscreen) {
+        setShowControls(true);
+      }
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    // @ts-ignore
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange); 
+    // @ts-ignore
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    // @ts-ignore
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      // @ts-ignore
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+      // @ts-ignore
+      document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+      // @ts-ignore
+      document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+    };
+  }, []);
+
+  // 2. Request Fullscreen
+  const enterFullscreen = async () => {
     const elem = document.documentElement;
-    if (!document.fullscreenElement) {
-      elem.requestFullscreen().then(() => {
+    try {
+      // @ts-ignore
+      const requestMethod = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen;
+      if (requestMethod) {
+        await requestMethod.call(elem);
+      } else {
+        // Fallback for unlikely case where API is missing
         setIsFullscreen(true);
-        setShowControls(true); // Show initially
-      });
-    } else {
-      document.exitFullscreen().then(() => setIsFullscreen(false));
+      }
+    } catch (e) {
+      console.error("Failed to enter fullscreen", e);
+      setIsFullscreen(true); // Fallback: simulate fullscreen state if blocked
+    }
+  };
+
+  // 3. Exit Fullscreen (Safe)
+  const exitFullscreen = async () => {
+    try {
+      // @ts-ignore
+      const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+
+      if (fullscreenElement) {
+        // @ts-ignore
+        if (document.exitFullscreen) {
+          await document.exitFullscreen();
+        // @ts-ignore
+        } else if (document.webkitExitFullscreen) {
+          // @ts-ignore
+          await document.webkitExitFullscreen();
+        // @ts-ignore
+        } else if (document.mozCancelFullScreen) {
+          // @ts-ignore
+          await document.mozCancelFullScreen();
+        // @ts-ignore
+        } else if (document.msExitFullscreen) {
+          // @ts-ignore
+          await document.msExitFullscreen();
+        }
+      } else {
+        // Not in fullscreen natively, force state update
+        setIsFullscreen(false);
+      }
+    } catch (e) {
+      console.error("Failed to exit fullscreen", e);
+      // Force state update on error
+      setIsFullscreen(false);
     }
   };
 
@@ -60,7 +136,7 @@ const App: React.FC = () => {
       setShowControls(true);
       if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
       
-      // Hide after 0.75 seconds of inactivity (reduced from 1500ms)
+      // Hide after 0.75 seconds of inactivity
       controlsTimeoutRef.current = window.setTimeout(() => {
         setShowControls(false);
       }, 750);
@@ -92,12 +168,22 @@ const App: React.FC = () => {
     }
   };
 
+  const handleToggleUtilities = () => {
+    const nextState = !showUtilities;
+    setShowUtilities(nextState);
+    // Reset active utility when closing sidebar to restore preview
+    if (!nextState) {
+      setActiveUtility(null);
+    }
+  };
+
   const AuthorImage = ({ className }: { className?: string }) => (
     <img 
       src={AUTHOR_AVATAR_URL}
       onError={(e) => { e.currentTarget.src = FALLBACK_AVATAR_URL; }}
       alt="BGG Feng" 
       className={`object-cover ${className}`} 
+      loading="lazy"
     />
   );
 
@@ -131,7 +217,7 @@ const App: React.FC = () => {
 
            {/* Return Button - Replaced X icon with text */}
            <button 
-             onClick={() => document.exitFullscreen().then(()=>setIsFullscreen(false))} 
+             onClick={exitFullscreen} 
              className="bg-black/40 hover:bg-black/80 text-white px-4 py-2 rounded-lg backdrop-blur-md border border-white/10 shadow-lg hover:scale-105 transition-all active:scale-95 text-sm font-medium"
            >
               返回
@@ -170,35 +256,49 @@ const App: React.FC = () => {
       {/* Sidebar: Configuration */}
       <div className="w-full md:w-[400px] bg-[#F8F7F4] border-r border-[#E5E0D8] flex flex-col h-full z-10 shadow-xl">
         {/* Header - Height adjusted to accommodate stacking */}
-        <div className="h-16 px-6 border-b border-[#E5E0D8] bg-[#F8F7F4] flex flex-col justify-center shrink-0">
-           <a 
-             href="https://www.youtube.com/watch?v=FxfEzHiIgQU"
-             target="_blank" 
-             rel="noopener noreferrer"
-             className="flex items-baseline gap-2 w-full overflow-hidden hover:opacity-70 transition-opacity"
+        <div className="h-16 px-6 border-b border-[#E5E0D8] bg-[#F8F7F4] flex items-center justify-between shrink-0">
+           <div className="flex flex-col justify-center min-w-0 mr-2">
+             <a 
+               href="https://www.youtube.com/watch?v=FxfEzHiIgQU"
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="flex items-baseline gap-2 w-full overflow-hidden hover:opacity-70 transition-opacity"
+             >
+               <h1 className="text-2xl font-black text-[#4A4036] tracking-tight flex items-center shrink-0">
+                 <span className="text-[#B38867]">List</span>Deck
+               </h1>
+               <span className="text-sm text-[#786C5E] font-bold shrink-0">名單生產器</span>
+             </a>
+             <a 
+               href="https://www.instagram.com/bgg.feng/" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               className="text-[10px] text-[#B38867]/70 hover:text-[#B38867] font-medium transition-colors truncate mt-0.5"
+             >
+               By 小豐｜婚禮主持aka喜劇受害人(@Bgg.Feng)
+             </a>
+           </div>
+
+           <button 
+             onClick={handleToggleUtilities}
+             className={`shrink-0 p-2 rounded-lg border transition-all duration-200 ${showUtilities ? 'bg-[#B76E79] text-white border-[#B76E79]' : 'bg-white text-gray-500 border-gray-200 hover:bg-gray-50'}`}
+             title={showUtilities ? "返回名單列表" : "開啟實用工具"}
            >
-             <h1 className="text-2xl font-black text-[#4A4036] tracking-tight flex items-center shrink-0">
-               <span className="text-[#B38867]">List</span>Deck
-             </h1>
-             <span className="text-sm text-[#786C5E] font-bold shrink-0">名單生產器</span>
-           </a>
-           <a 
-             href="https://www.instagram.com/bgg.feng/" 
-             target="_blank" 
-             rel="noopener noreferrer"
-             className="text-[10px] text-[#B38867]/70 hover:text-[#B38867] font-medium transition-colors truncate mt-0.5"
-           >
-             By 小豐｜婚禮主持aka喜劇受害人(@Bgg.Feng)
-           </a>
+             <Wrench size={18} />
+           </button>
         </div>
 
-        <div className="flex-1 p-6 overflow-hidden">
-          <VendorForm 
-            vendors={vendors} 
-            setVendors={setVendors}
-            showQR={showQR}
-            setShowQR={setShowQR}
-          />
+        <div className="flex-1 p-6 overflow-hidden relative">
+          {showUtilities ? (
+             <UtilitiesList onSelectTool={setActiveUtility} activeTool={activeUtility} />
+          ) : (
+            <VendorForm 
+              vendors={vendors} 
+              setVendors={setVendors}
+              showQR={showQR}
+              setShowQR={setShowQR}
+            />
+          )}
         </div>
       </div>
 
@@ -217,7 +317,7 @@ const App: React.FC = () => {
                 更多
              </button>
 
-            <button onClick={toggleFullscreen} className="flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition">
+            <button onClick={enterFullscreen} className="flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition">
               <div className="w-5 h-5 rounded-full overflow-hidden border border-gray-200 shadow-sm">
                 <AuthorImage className="w-full h-full" />
               </div>
@@ -228,18 +328,24 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Preview Canvas */}
+        {/* Content Canvas */}
         <div className="flex-1 bg-gray-200 flex items-center justify-center p-8 overflow-hidden">
-          <div 
-            ref={previewRef}
-            className="w-full max-w-6xl aspect-video bg-white shadow-2xl rounded-sm overflow-hidden border border-gray-300 ring-4 ring-white relative group"
-          >
-             <PreviewPlayer 
-               vendors={vendors}
-               currentStyle={currentStyle}
-               showQR={showQR}
-             />
-          </div>
+          {activeUtility === 'crop' ? (
+             <div className="w-full h-full max-w-5xl animate-in fade-in zoom-in duration-300">
+               <PhotoCropper />
+             </div>
+          ) : (
+            <div 
+              ref={previewRef}
+              className="w-full max-w-6xl aspect-video bg-white shadow-2xl rounded-sm overflow-hidden border border-gray-300 ring-4 ring-white relative group"
+            >
+               <PreviewPlayer 
+                 vendors={vendors}
+                 currentStyle={currentStyle}
+                 showQR={showQR}
+               />
+            </div>
+          )}
         </div>
 
         {/* Style Selector Footer */}
@@ -281,6 +387,11 @@ const App: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Welcome Modal */}
+      {showWelcomeModal && (
+        <WelcomeModal onClose={() => setShowWelcomeModal(false)} />
+      )}
 
       {/* "More" Info Modal */}
       {showMoreModal && (
@@ -357,7 +468,7 @@ const App: React.FC = () => {
                         <span className="text-[10px] font-bold bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded shrink-0 mt-0.5">v1.4</span>
                         <div className="text-xs text-gray-600 group-hover:text-[#333333]">
                           <p className="font-medium text-[#333333] group-hover:text-[#FF6F61] transition-colors">迷因彩蛋</p>
-                          增加迷因彩蛋，供使用者耗費無謂的心神。
+                          增加迷因彩蛋，消耗使用者無謂心神。
                         </div>
                      </a>
                      <a 

@@ -24,6 +24,7 @@ export interface Vendor {
   scale?: number; // 0-100, default 50 (1x)
   offsetX?: number; // pixels, default 0
   offsetY?: number; // pixels, default 0
+  showHandle?: boolean;
 }
 
 export interface AppState {

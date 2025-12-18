@@ -1,5 +1,8 @@
 import { StyleType, Vendor } from './types';
 
+export const AUTHOR_AVATAR_URL = "https://scontent.fkhh1-1.fna.fbcdn.net/v/t1.6435-9/92353989_125022249140816_578947242015064064_n.png?stp=dst-jpg_tt6&_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=lYJE8QVKis8Q7kNvwFcDCWo&_nc_oc=AdkkxB6569c0j3TIEhussHKobD9EK1mDQW85k63Ug7NCDl0vKyJPSyJGKBm3az2cybQ&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=E4kk_110p3hfBwqjmmyBpw&oh=00_Aflc_zddTxrfwq3tQlmtBp_Thp-dL4ACShM_ytb4WDuKhA&oe=69593C46";
+export const FALLBACK_AVATAR_URL = "https://ui-avatars.com/api/?name=BGG&background=000&color=fff&rounded=true&bold=true";
+
 export const INITIAL_VENDORS: Vendor[] = [
   {
     id: '1',
@@ -9,6 +12,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     url: 'https://www.instagram.com/ray_wedding_host',
     imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wd9rwQiR4Y8Q7kNvwHoNMb_&_nc_oc=AdlPhe5-UfM1h_rwC-9KiHVxDDJz6jY8SJLlHrb-mACkFUqz0vDPdhVgpv0CZl-G-Yk&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=9zziu8VIy6CKdHie20ZlKg&oh=00_Afl-qvJTabTrWB7EZAC8g2sxTVfBoSSCqwYYvnPzYHAXPA&oe=69380021',
     scale: 50,
+    showHandle: true,
   },
   {
     id: '2',
@@ -18,6 +22,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     url: 'https://www.instagram.com/Bgg.Feng',
     imageUrl: 'https://scontent.fkhh1-2.fna.fbcdn.net/v/t39.30808-6/308606892_493333446137991_866753150527897559_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=wY0Bg8JpHhEQ7kNvwHcDXR3&_nc_oc=Adnl_Tb-ItiJ7vSxQMNEAtajlUhxE6uC2QuccvZN5j421MB9dB5nsZibc4dleWMvDDE&_nc_zt=23&_nc_ht=scontent.fkhh1-2.fna&_nc_gid=JZMevhKNiweWAjZ5NnwuIA&oh=00_AfmqQSfzjFDlanwrG5KwPkMkhgs7GWzyCBvrqIJx7rRoNA&oe=693807EF',
     scale: 50,
+    showHandle: true,
   },
   {
     id: '3',
@@ -27,6 +32,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     url: 'https://www.instagram.com/wayan.tw',
     imageUrl: 'https://static.wixstatic.com/media/8c334e_55010d75c4a142aca8d074b3269eb857~mv2.png/v1/fill/w_562,h_374,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/Wayan%20logo%20color%20on%20transparent.png',
     scale: 50,
+    showHandle: true,
   }
 ];
 
@@ -39,6 +45,7 @@ export const PRESET_VENDORS: Vendor[] = [
     url: 'https://www.instagram.com/mizooming',
     imageUrl: 'https://ugc.production.linktr.ee/b3400246-40c1-49d8-a64a-459ffb6ac96b_IMG_8115.jpeg?io=true&size=avatar-v3_0',
     scale: 50,
+    showHandle: true,
   },
   {
     id: 'preset-5',
@@ -48,6 +55,7 @@ export const PRESET_VENDORS: Vendor[] = [
     url: 'https://www.instagram.com/lowca__',
     imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/358598805_690029403137594_1984024008636193652_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=rokvTntBK5YQ7kNvwHJQSoL&_nc_oc=AdmZQ3uYZt1W2kPjnCT8PBJwUlcffDwrAdIrOcqwCljieKT9igPj5C6Ys0sos_jOHjY&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=3r2OQ2CIRu8yw4ooaxPDeg&oh=00_AfnRdCcEnL70e0FTN-kREccX6AuHytoI4MrMjYT3OqA0nQ&oe=6938283D',
     scale: 50,
+    showHandle: true,
   }
 ];
 

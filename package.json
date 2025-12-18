@@ -1,5 +1,5 @@
 {
-  "name": "wedding-vendor-card-generator-(婚禮廠商卡片產生器)",
+  "name": "list-deck-名單生產器",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,11 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^18.3.1",
+    "react": "^19.2.1",
     "framer-motion": "10.16.4",
     "qrcode.react": "3.1.0",
     "lucide-react": "0.263.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

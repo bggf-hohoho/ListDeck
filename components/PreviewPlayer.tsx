@@ -15,7 +15,8 @@ interface LayoutSettings {
   scale: number;
   gap: string;
   qrSize: number;
-  maxWidth: string;
+  widthClass: string; // Changed from maxWidth to widthClass for better control
+  padding: string;
 }
 
 // --- Reusable Components (Defined Outside) ---
@@ -32,13 +33,14 @@ const QRWrapper: React.FC<{ size: number; url: string; className?: string; style
 
 // Grid Container Helper
 const GridContainer: React.FC<{ children: React.ReactNode; layout: LayoutSettings; className?: string }> = ({ children, layout, className }) => (
-  <div className="w-full h-full flex items-center justify-center p-8">
+  <div className={`w-full h-full flex items-center justify-center ${layout.padding}`}>
     <motion.div 
       layout
-      className={`grid place-items-center ${layout.gap} ${layout.maxWidth} w-full ${className || ''}`}
+      className={`grid place-items-center ${layout.gap} ${layout.widthClass} ${className || ''}`}
       style={{ 
         gridTemplateColumns: `repeat(${layout.cols}, minmax(0, 1fr))`,
-        transform: `scale(${layout.scale})`
+        transform: `scale(${layout.scale})`,
+        transformOrigin: 'center center'
       }}
     >
       {children}
@@ -55,21 +57,71 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
   const count = vendors.length;
 
   // --- Smart Layout Engine ---
-  const getLayoutSettings = (): LayoutSettings => {
-    // Highly optimized layout settings for visibility on 16:9 screens
-    if (count === 1) return { cols: 1, scale: 1.6, gap: 'gap-0', qrSize: 140, maxWidth: 'max-w-xl' };
-    if (count === 2) return { cols: 2, scale: 1.35, gap: 'gap-32', qrSize: 120, maxWidth: 'max-w-6xl' };
-    if (count === 3) return { cols: 3, scale: 1.15, gap: 'gap-16', qrSize: 110, maxWidth: 'max-w-7xl' };
-    if (count === 4) return { cols: 2, scale: 1.1, gap: 'gap-x-32 gap-y-12', qrSize: 100, maxWidth: 'max-w-5xl' };
-    if (count <= 6) return { cols: 3, scale: 1.0, gap: 'gap-x-20 gap-y-10', qrSize: 95, maxWidth: 'max-w-[1400px]' };
-    if (count <= 8) return { cols: 4, scale: 0.9, gap: 'gap-x-12 gap-y-8', qrSize: 90, maxWidth: 'max-w-[1700px]' };
-    if (count <= 10) return { cols: 5, scale: 0.85, gap: 'gap-x-10 gap-y-6', qrSize: 85, maxWidth: 'max-w-[1900px]' };
-    
-    // Fallback for very large numbers
-    return { cols: 6, scale: 0.75, gap: 'gap-x-8 gap-y-6', qrSize: 75, maxWidth: 'max-w-full' };
+  const getLayoutSettings = (style: StyleType): LayoutSettings => {
+    // Optimized layout settings to use full screen real estate
+    let settings: LayoutSettings;
+
+    // 1 Item: Centered, Large
+    if (count === 1) {
+      settings = { cols: 1, scale: 1.8, gap: 'gap-0', qrSize: 150, widthClass: 'max-w-xl', padding: 'p-12' };
+    } 
+    // 2 Items: Split Left/Right, comfortably large
+    else if (count === 2) {
+      settings = { cols: 2, scale: 1.55, gap: 'gap-24', qrSize: 130, widthClass: 'max-w-6xl', padding: 'p-12' };
+    } 
+    // 3 Items: Row of 3. Reduced width to 85% to avoid edges.
+    else if (count === 3) {
+      settings = { cols: 3, scale: 1.35, gap: 'gap-12', qrSize: 120, widthClass: 'w-[85%]', padding: 'p-8' };
+    } 
+    // 4 Items: 2x2 Grid. Using percentage width to center better than max-w-5xl.
+    else if (count === 4) {
+      settings = { cols: 2, scale: 1.35, gap: 'gap-x-32 gap-y-12', qrSize: 115, widthClass: 'w-[80%]', padding: 'p-8' };
+    } 
+    // 5-6 Items: 3 Columns. Reduced width to 85%.
+    else if (count <= 6) {
+      settings = { cols: 3, scale: 1.25, gap: 'gap-x-12 gap-y-10', qrSize: 110, widthClass: 'w-[85%]', padding: 'p-6' };
+    } 
+    // 7-8 Items: 4 Columns. Reduced width to 90%.
+    else if (count <= 8) {
+      settings = { cols: 4, scale: 1.15, gap: 'gap-x-8 gap-y-8', qrSize: 100, widthClass: 'w-[90%]', padding: 'p-6' };
+    } 
+    // 9-10 Items: 5 Columns. Reduced width to 92%.
+    else if (count <= 10) {
+      settings = { cols: 5, scale: 1.05, gap: 'gap-x-6 gap-y-6', qrSize: 90, widthClass: 'w-[92%]', padding: 'p-4' };
+    } 
+    // 11-12 Items: 6 Columns. Reduced width to 94%.
+    else if (count <= 12) {
+      settings = { cols: 6, scale: 1.0, gap: 'gap-x-4 gap-y-6', qrSize: 80, widthClass: 'w-[94%]', padding: 'p-4' };
+    }
+    // 13+ Items
+    else {
+      settings = { cols: 6, scale: 0.9, gap: 'gap-x-4 gap-y-4', qrSize: 75, widthClass: 'w-full', padding: 'p-4' };
+    }
+
+    // --- Style-Specific Adjustments ---
+    // Bulky styles need slightly less scale to prevent overlap, but we keep the width wide.
+    const bulkyStyles = [
+        StyleType.PLAYFUL_POP, 
+        StyleType.COMIC_POP, 
+        StyleType.ANIME_MANGA,
+        StyleType.CUTE_KAWAII,
+        StyleType.VINTAGE_POLAROID
+    ];
+
+    if (bulkyStyles.includes(style)) {
+        // Only slightly reduce scale, rely on gap
+        settings.scale *= 0.94; 
+        
+        // Ensure gap is sufficient for rotated/shadowed elements
+        if (!settings.gap.includes('gap-x')) {
+            settings.gap = 'gap-10';
+        }
+    }
+
+    return settings;
   };
 
-  const layout = getLayoutSettings();
+  const layout = getLayoutSettings(currentStyle);
 
   // Helper for image scaling and positioning style
   // Applied order: Translate first (move element), then Scale (grow around center)
@@ -95,7 +147,9 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
            <h3 className="text-[#8b7355] tracking-[0.2em] uppercase text-xs mb-2 font-serif-tc">{vendor.role}</h3>
            <h1 className="text-2xl font-serif-tc text-gray-800 mb-3 truncate w-full px-2">{vendor.name}</h1>
            {showQR && <QRWrapper size={layout.qrSize} url={vendor.url} />}
-           <span className="text-gray-400 text-[10px] font-medium tracking-wider mt-2">{vendor.handle.startsWith('@') ? vendor.handle : `@${vendor.handle}`}</span>
+           {vendor.showHandle !== false && (
+             <span className="text-gray-400 text-[10px] font-medium tracking-wider mt-2">{vendor.handle.startsWith('@') ? vendor.handle : `@${vendor.handle}`}</span>
+           )}
         </motion.div>
       ))}
     </GridContainer>
@@ -107,23 +161,23 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
          <motion.div
            key={vendor.id}
            initial={{ scale: 0, rotate: -10 }}
-           animate={{ scale: 1, rotate: i % 2 === 0 ? 2 : -2 }}
+           animate={{ scale: 1, rotate: i % 2 === 0 ? 1 : -1 }}
            whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-           className="bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center p-5 w-[260px]"
+           className="bg-white border-[3px] border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center p-4 w-[230px]"
          >
-            <div className="relative mb-3">
-               <div className="absolute inset-0 bg-yellow-300 rounded-full translate-x-1 translate-y-1 border-2 border-black"></div>
-               <div className="w-24 h-24 rounded-full border-2 border-black relative z-10 bg-gray-200 overflow-hidden">
+            <div className="relative mb-2">
+               <div className="absolute inset-0 bg-yellow-300 rounded-full translate-x-0.5 translate-y-0.5 border-2 border-black"></div>
+               <div className="w-20 h-20 rounded-full border-2 border-black relative z-10 bg-gray-200 overflow-hidden">
                  <img src={vendor.imageUrl} className="w-full h-full object-cover" style={imgStyle(vendor)} />
                </div>
             </div>
-            <span className="bg-[#FF6B6B] text-white px-3 py-1 rounded-full border-2 border-black font-bold text-xs mb-2 truncate max-w-full">
+            <span className="bg-[#FF6B6B] text-white px-3 py-0.5 rounded-full border-2 border-black font-bold text-[10px] mb-2 truncate max-w-full">
               {vendor.role}
             </span>
-            <h1 className="text-xl font-black text-black leading-tight mb-3 truncate w-full">{vendor.name}</h1>
+            <h1 className="text-lg font-black text-black leading-tight mb-2 truncate w-full">{vendor.name}</h1>
             {showQR && (
-              <div className="bg-blue-100 p-2 rounded-lg border-2 border-black">
-                  <QRWrapper size={layout.qrSize} url={vendor.url} className="shadow-none border-none p-0 bg-transparent" />
+              <div className="bg-blue-100 p-1.5 rounded-lg border-2 border-black">
+                  <QRWrapper size={layout.qrSize * 0.9} url={vendor.url} className="shadow-none border-none p-0 bg-transparent" />
               </div>
             )}
          </motion.div>
@@ -253,19 +307,19 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ type: "spring", bounce: 0.5, delay: i * 0.1 }}
-            className="bg-white border-[4px] border-black p-4 relative shadow-[8px_8px_0px_#000] flex flex-col items-center w-[250px]"
+            className="bg-white border-[3px] border-black p-3 relative shadow-[5px_5px_0px_#000] flex flex-col items-center w-[230px]"
           >
-            <div className="absolute -top-3 -right-3 bg-[#F44336] text-white font-bold border-2 border-black px-2 py-1 transform rotate-12 z-10 text-xs">POW!</div>
-            <div className="w-full aspect-square border-[3px] border-black mb-3 overflow-hidden relative">
+            <div className="absolute -top-2 -right-2 bg-[#F44336] text-white font-bold border-2 border-black px-1.5 py-0.5 transform rotate-12 z-10 text-[10px]">POW!</div>
+            <div className="w-full aspect-square border-[3px] border-black mb-2 overflow-hidden relative">
               <img src={vendor.imageUrl} className="w-full h-full object-cover filter contrast-125 saturate-150" style={imgStyle(vendor)} />
             </div>
-            <div className="bg-cyan-300 border-[2px] border-black w-full p-1 mb-2 transform -skew-x-6">
-              <h3 className="text-black font-black text-xs uppercase text-center transform skew-x-6">{vendor.role}</h3>
+            <div className="bg-cyan-300 border-[2px] border-black w-full p-0.5 mb-1 transform -skew-x-6">
+              <h3 className="text-black font-black text-[10px] uppercase text-center transform skew-x-6">{vendor.role}</h3>
             </div>
-            <h1 className="font-black text-xl uppercase italic tracking-tighter truncate w-full text-center">{vendor.name}</h1>
+            <h1 className="font-black text-lg uppercase italic tracking-tighter truncate w-full text-center mb-1">{vendor.name}</h1>
             {showQR && (
-              <div className="mt-3 border-2 border-black p-1 bg-yellow-300">
-                 <QRWrapper size={layout.qrSize} url={vendor.url} className="shadow-none border-none p-0 bg-transparent" />
+              <div className="mt-2 border-2 border-black p-1 bg-yellow-300">
+                 <QRWrapper size={layout.qrSize * 0.9} url={vendor.url} className="shadow-none border-none p-0 bg-transparent" />
               </div>
             )}
           </motion.div>
@@ -450,7 +504,16 @@ const PreviewPlayerComponent: React.FC<PreviewPlayerProps> = ({
   return (
     <div className={`w-full h-full relative ${styleConfig.bg} ${styleConfig.text} transition-colors duration-500 overflow-hidden`}>
       <AnimatePresence mode='wait'>
-         {renderContent()}
+        <motion.div 
+          key={currentStyle}
+          className="w-full h-full"
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.02 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+        >
+          {renderContent()}
+        </motion.div>
       </AnimatePresence>
       
       {/* Footer Credit */}

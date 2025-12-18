@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { Vendor } from '../types';
-import { Plus, Minus, Trash2, Instagram, Upload, Image as ImageIcon, Link as LinkIcon, ZoomIn, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, QrCode } from 'lucide-react';
+import { Plus, Minus, Trash2, Instagram, Upload, Image as ImageIcon, Link as LinkIcon, ZoomIn, ArrowUp, ArrowDown, ArrowLeft, ArrowRight, QrCode, Eye, EyeOff } from 'lucide-react';
 import { INITIAL_VENDORS, PRESET_VENDORS } from '../constants';
 
 interface VendorFormProps {
@@ -44,7 +44,8 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
           imageUrl: `https://picsum.photos/400/400?random=${Date.now()}`,
           scale: 50,
           offsetX: 0,
-          offsetY: 0
+          offsetY: 0,
+          showHandle: true
         };
       }
     }
@@ -52,6 +53,7 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
     const newVendor: Vendor = {
       ...newVendorTemplate,
       id: Date.now().toString(),
+      showHandle: newVendorTemplate.showHandle !== false
     };
     setVendors([...vendors, newVendor]);
   };
@@ -62,7 +64,7 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
     }
   };
 
-  const handleUpdate = (id: string, field: keyof Vendor, value: string | number) => {
+  const handleUpdate = (id: string, field: keyof Vendor, value: string | number | boolean) => {
     setVendors(vendors.map((v, index) => {
       if (v.id !== id) return v;
 
@@ -188,13 +190,22 @@ export const VendorForm: React.FC<VendorFormProps> = ({ vendors, setVendors, sho
                     <Instagram size={14} className="mr-1"/> 
                     輸入 IG 帳號
                   </label>
-                  <button 
-                    onClick={() => handleRemove(vendor.id)} 
-                    className="text-[#B47474]/40 hover:text-red-500 transition p-1"
-                    title="刪除"
-                  >
-                    <Trash2 size={14} />
-                  </button>
+                  <div className="flex items-center gap-1">
+                    <button 
+                        onClick={() => handleUpdate(vendor.id, 'showHandle', !(vendor.showHandle !== false))} 
+                        className="text-[#B47474]/40 hover:text-[#B47474] transition p-1"
+                        title={vendor.showHandle !== false ? "隱藏帳號" : "顯示帳號"}
+                    >
+                        {vendor.showHandle !== false ? <Eye size={14} /> : <EyeOff size={14} />}
+                    </button>
+                    <button 
+                        onClick={() => handleRemove(vendor.id)} 
+                        className="text-[#B47474]/40 hover:text-red-500 transition p-1"
+                        title="刪除"
+                    >
+                        <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
 
                 <div className="relative">
