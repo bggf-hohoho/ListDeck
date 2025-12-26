@@ -26,6 +26,11 @@ const App: React.FC = () => {
 
   const styleKeys = Object.keys(STYLE_CONFIG) as StyleType[];
 
+  // 設定網頁標題
+  useEffect(() => {
+    document.title = '名單生產器';
+  }, []);
+
   const changeStyle = (direction: 'prev' | 'next') => {
     const currentIndex = styleKeys.indexOf(currentStyle);
     let newIndex;
