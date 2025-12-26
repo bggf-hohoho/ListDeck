@@ -7,7 +7,7 @@ import {
 import { PreviewPlayer } from './components/PreviewPlayer';
 import { VendorForm } from './components/VendorForm';
 import { WelcomeModal } from './components/WelcomeModal';
-import { INITIAL_VENDORS, STYLE_CONFIG, AUTHOR_AVATAR_URL, FALLBACK_AVATAR_URL } from './constants';
+import { INITIAL_VENDORS, STYLE_CONFIG, AUTHOR_AVATAR_URL, UI_ICON_URL, FALLBACK_AVATAR_URL } from './constants';
 import { StyleType, Vendor } from './types';
 import { downloadAsImage } from './utils/exportUtils';
 
@@ -146,11 +146,12 @@ const App: React.FC = () => {
     }
   };
 
-  const AuthorImage = ({ className }: { className?: string }) => (
+  // 介面小圖示組件
+  const UIIcon = ({ className }: { className?: string }) => (
     <img 
-      src={AUTHOR_AVATAR_URL}
+      src={UI_ICON_URL}
       onError={(e) => { e.currentTarget.src = FALLBACK_AVATAR_URL; }}
-      alt="BGG Feng" 
+      alt="BGG Feng Icon" 
       className={`object-cover ${className}`} 
       loading="lazy"
     />
@@ -174,7 +175,7 @@ const App: React.FC = () => {
              className={`flex items-center gap-2 bg-black/40 hover:bg-black/80 text-white px-4 py-2 rounded-lg backdrop-blur-md border border-white/10 shadow-lg hover:scale-105 transition-all active:scale-95 ${isExporting ? 'opacity-50 cursor-not-allowed' : ''}`}
            >
               <div className="w-5 h-5 rounded-full overflow-hidden">
-                <AuthorImage className="w-full h-full" />
+                <UIIcon className="w-full h-full" />
               </div>
               <span className="text-sm font-medium">{isExporting ? '處理中...' : '輸出'}</span>
            </button>
@@ -265,7 +266,7 @@ const App: React.FC = () => {
 
             <button onClick={enterFullscreen} className="flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-50 transition">
               <div className="w-5 h-5 rounded-full overflow-hidden border border-gray-200 shadow-sm">
-                <AuthorImage className="w-full h-full" />
+                <UIIcon className="w-full h-full" />
               </div>
               <span className="text-sm font-medium">預覽</span>
             </button>
@@ -360,7 +361,12 @@ const App: React.FC = () => {
                   className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition border border-[#EAEAEA] group"
                 >
                   <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md group-hover:scale-105 transition-transform bg-black">
-                     <AuthorImage className="w-full h-full" />
+                     <img 
+                       src={UI_ICON_URL} 
+                       onError={(e) => { e.currentTarget.src = FALLBACK_AVATAR_URL; }}
+                       alt="Author Icon" 
+                       className="w-full h-full object-cover" 
+                     />
                   </div>
                   <div>
                      <h4 className="font-bold text-[#333333]">小豐｜婚禮主持aka喜劇受害人</h4>

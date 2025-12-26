@@ -1,7 +1,11 @@
 import { StyleType, Vendor } from './types';
 
-// 作者：小豐 的大頭貼 (使用使用者先前提供的網址)
-export const AUTHOR_AVATAR_URL = "https://scontent.fkhh1-2.fna.fbcdn.net/v/t39.30808-6/308606892_493333446137991_866753150527897559_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=hTec36x_PiYQ7kNvwHDT0-w&_nc_oc=AdmEGy5_kLDfR5Xg84gfroOKRvSSY6S9i84jRmqg8iYbkja9LKVBncYXqXNaIaSmLj0&_nc_zt=23&_nc_ht=scontent.fkhh1-2.fna&_nc_gid=La1R28fJFikmtWxbtO9gGw&oh=00_Aflsx9jc9NG3fgzmIsXV3A2G5StBtM0iY7wAxBvEJ-El6A&oe=69499BEF";
+// 作者：小豐 的大頭貼 (臉部照片)
+export const AUTHOR_AVATAR_URL = "https://scontent.fkhh1-2.fna.fbcdn.net/v/t39.30808-6/308606892_493333446137991_866753150527897559_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=qc7TB-L23nwQ7kNvwHsv-V5&_nc_oc=AdlX61gkF7f2UJfUWfU1jDWCbuSNJ9kCKpGek_NBs-uaQL8DR9DMuuZh3Y_JkhYTzPI&_nc_zt=23&_nc_ht=scontent.fkhh1-2.fna&_nc_gid=XpOYEI5YVl7rZZChF3FmTw&oh=00_Afk_YnqsAjGnB-deZnVdHcTCbbldCG2f089O8yaEQKBa3w&oe=695427EF";
+
+// 介面專用小圖示 (預覽、輸出按鈕等)
+export const UI_ICON_URL = "https://scontent.fkhh1-1.fna.fbcdn.net/v/t1.6435-9/92353989_125022249140816_578947242015064064_n.png?stp=dst-jpg_tt6&_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=iG2JybUrPI0Q7kNvwFe1XAd&_nc_oc=AdnRzM5CpN6tFsRk4MfY1Q8UU69geMJ3Tbal6uyXSMJAFaiyiTps9lPjx_xqWEuCPFE&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=oPbIA-CKhs7Mi_JrdI7tDA&oh=00_Afmh-x2cjBWXaIMihJvWE7wCZa6-lO96GDM2FwBkilkGbA&oe=6975CCC6";
+
 export const FALLBACK_AVATAR_URL = "https://ui-avatars.com/api/?name=User&background=f3f4f6&color=B76E79&rounded=true&bold=true";
 
 export const INITIAL_VENDORS: Vendor[] = [
@@ -11,8 +15,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     name: '妤睿Ray',
     handle: 'ray_wedding_host',
     url: 'https://www.instagram.com/ray_wedding_host',
-    // 修正：更換為使用者指定的固定 FB CDN 網址
-    imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=JvHfo8GnN8QQ7kNvwFCrU3e&_nc_oc=AdmXVzVwqndP3t-UXq4qem3fdJyVmG8wREaXAaEXVvOIM_gchrgPyOvnBN2EiP1mvRM&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=aLpU1eBbD8Xj3uGMfsfTkg&oh=00_AfkjXshwaR2w5trVqL9Use0d2KQU0RIGvpUXLe1i_GmjWQ&oe=69499421',
+    imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=e7HoWNtZ1MoQ7kNvwGZwhTt&_nc_oc=AdkPvhWy8cwo3RHUU0RB-zG9pr7XrO4kGNhsOwF52NgfxTDpbILNTl-PTbpQshe88zI&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=5NfQomGQdwwSbQQisMJUOw&oh=00_Afm7owmYFgKwl2f0yLrvcx-0pj82NvU9V3jn3sc3vAZMvw&oe=69542021',
     scale: 50,
     showHandle: true,
   },

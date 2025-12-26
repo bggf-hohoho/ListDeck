@@ -1,6 +1,6 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { AUTHOR_AVATAR_URL, FALLBACK_AVATAR_URL } from '../constants';
+import { UI_ICON_URL, FALLBACK_AVATAR_URL } from '../constants';
 
 interface WelcomeModalProps {
   onClose: () => void;
@@ -19,12 +19,12 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({ onClose }) => {
         </button>
         
         <div className="p-6 pt-8 flex flex-col items-center text-center">
-          {/* Updated: Removed pink border/bg, increased size from w-16 (64px) to w-[74px] (~15% larger) */}
+          {/* Updated: Using UI_ICON_URL as requested by user */}
           <div className="w-[74px] h-[74px] rounded-full flex items-center justify-center mb-4 shadow-md overflow-hidden">
              <img 
-               src={AUTHOR_AVATAR_URL}
+               src={UI_ICON_URL}
                onError={(e) => { e.currentTarget.src = FALLBACK_AVATAR_URL; }}
-               alt="Author"
+               alt="Icon"
                className="w-full h-full object-cover"
              />
           </div>
