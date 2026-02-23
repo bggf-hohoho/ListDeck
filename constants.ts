@@ -1,10 +1,10 @@
 import { StyleType, Vendor } from './types';
 
 // 作者：小豐 的大頭貼 (臉部照片)
-export const AUTHOR_AVATAR_URL = "https://scontent.fkhh1-2.fna.fbcdn.net/v/t39.30808-6/308606892_493333446137991_866753150527897559_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=qc7TB-L23nwQ7kNvwHsv-V5&_nc_oc=AdlX61gkF7f2UJfUWfU1jDWCbuSNJ9kCKpGek_NBs-uaQL8DR9DMuuZh3Y_JkhYTzPI&_nc_zt=23&_nc_ht=scontent.fkhh1-2.fna&_nc_gid=XpOYEI5YVl7rZZChF3FmTw&oh=00_Afk_YnqsAjGnB-deZnVdHcTCbbldCG2f089O8yaEQKBa3w&oe=695427EF";
+export const AUTHOR_AVATAR_URL = "https://scontent-tpe1-1.xx.fbcdn.net/v/t39.30808-6/308606892_493333446137991_866753150527897559_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=vGXRAiUB4xYQ7kNvwER4Pey&_nc_oc=AdlnbAwezmA5biqECfOqz0AfA3ZbjeUvGSXYtClkXbRUfu2jha72yVo2CXAWJtlQk1Q&_nc_zt=23&_nc_ht=scontent-tpe1-1.xx&_nc_gid=5o8wzhrazYo36QCf7nlr6w&oh=00_AfvZcCjVokFd2m2_s7pQ_WICOwYeTFNFJCwQNiR9fIZwjw&oe=69A228AF";
 
 // 介面專用小圖示 (預覽、輸出按鈕等)
-export const UI_ICON_URL = "https://scontent.fkhh1-1.fna.fbcdn.net/v/t1.6435-9/92353989_125022249140816_578947242015064064_n.png?stp=dst-jpg_tt6&_nc_cat=106&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=iG2JybUrPI0Q7kNvwFe1XAd&_nc_oc=AdnRzM5CpN6tFsRk4MfY1Q8UU69geMJ3Tbal6uyXSMJAFaiyiTps9lPjx_xqWEuCPFE&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=oPbIA-CKhs7Mi_JrdI7tDA&oh=00_Afmh-x2cjBWXaIMihJvWE7wCZa6-lO96GDM2FwBkilkGbA&oe=6975CCC6";
+export const UI_ICON_URL = "https://scontent-tpe1-1.xx.fbcdn.net/v/t1.6435-9/92353989_125022249140816_578947242015064064_n.png?stp=dst-jpg_tt6&_nc_cat=106&ccb=1-7&_nc_sid=53a332&_nc_ohc=gsQTEGtSl7oQ7kNvwFWPpWu&_nc_oc=AdkvLL0VWxUw76ro-gO7S7Gr_QgH8_WfwHDmZajeWXN4oRzC1U3d7tx6j-TplewwZ78&_nc_zt=23&_nc_ht=scontent-tpe1-1.xx&_nc_gid=b_Jrj7qkmlx-bOq96UE7tw&oh=00_AfvjBUdMw0KVF5AKGMkxwm80Z4E0t9fnNqO2O1I7FoVnPw&oe=69C3CD86";
 
 export const FALLBACK_AVATAR_URL = "https://ui-avatars.com/api/?name=User&background=f3f4f6&color=B76E79&rounded=true&bold=true";
 
@@ -15,7 +15,7 @@ export const INITIAL_VENDORS: Vendor[] = [
     name: '妤睿Ray',
     handle: 'ray_wedding_host',
     url: 'https://www.instagram.com/ray_wedding_host',
-    imageUrl: 'https://scontent.fkhh1-1.fna.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=e7HoWNtZ1MoQ7kNvwGZwhTt&_nc_oc=AdkPvhWy8cwo3RHUU0RB-zG9pr7XrO4kGNhsOwF52NgfxTDpbILNTl-PTbpQshe88zI&_nc_zt=23&_nc_ht=scontent.fkhh1-1.fna&_nc_gid=5NfQomGQdwwSbQQisMJUOw&oh=00_Afm7owmYFgKwl2f0yLrvcx-0pj82NvU9V3jn3sc3vAZMvw&oe=69542021',
+    imageUrl: 'https://scontent-tpe1-1.xx.fbcdn.net/v/t39.30808-6/401263420_364163156133422_6906165210537268974_n.jpg?_nc_cat=100&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=881vKjNj7UoQ7kNvwGy-FNN&_nc_oc=Adn62BR024pdq2jKPlYLtTTDKdNUrfIUHTYQxh5avpiueAva63xtTXU0DUt-NBaDoRA&_nc_zt=23&_nc_ht=scontent-tpe1-1.xx&_nc_gid=GpGuVT-807Ss-ar1TqqwDg&oh=00_AftOeBhdlpyfQ3SsU2uBopMOiMYZq_dKAg4TLZIhtxNNtQ&oe=69A220E1',
     scale: 50,
     showHandle: true,
   },
