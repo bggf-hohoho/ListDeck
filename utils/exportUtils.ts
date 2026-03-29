@@ -10,7 +10,8 @@ export const downloadAsImage = async (element: HTMLElement, filename: string) =>
       quality: 0.95,
       pixelRatio: 2, // Higher resolution
       backgroundColor: '#ffffff',
-      // cacheBust: true, // Removed to prevent CORS preflight issues
+      cacheBust: true, // Re-added to prevent CORS preflight issues with cached images
+      imagePlaceholder: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=', // 1x1 transparent pixel fallback
     });
 
     const link = document.createElement('a');
