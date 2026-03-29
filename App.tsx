@@ -173,6 +173,22 @@ const App: React.FC = () => {
           />
         </div>
 
+        {isExporting && (
+          <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm">
+            <div className="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center max-w-sm w-full mx-4 border border-gray-100">
+              <div className="relative w-24 h-24 mb-6">
+                <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
+                <div className="absolute inset-0 rounded-full border-4 border-indigo-500 border-t-transparent animate-spin"></div>
+                <div className="absolute inset-2 rounded-full overflow-hidden shadow-inner">
+                  <UIIcon className="w-full h-full" />
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">正在為您輸出圖片...</h3>
+              <p className="text-gray-500 text-sm text-center">請勿關閉視窗，這可能需要幾秒鐘的時間</p>
+            </div>
+          </div>
+        )}
+
         <div className={`fixed top-6 right-6 flex items-center gap-3 transition-all duration-500 z-50 ${showControls ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}`}>
            <button 
              onClick={(e) => { e.stopPropagation(); handleDownload(); }}
