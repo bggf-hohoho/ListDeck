@@ -10,7 +10,7 @@ export const downloadAsImage = async (element: HTMLElement, filename: string) =>
       quality: 0.95,
       pixelRatio: 2, // Higher resolution
       backgroundColor: '#ffffff',
-      cacheBust: true, // Attempt to bypass CORS caching
+      // cacheBust: true, // Removed to prevent CORS preflight issues
     });
 
     const link = document.createElement('a');
